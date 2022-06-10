@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Api for esign in rails"
   spec.homepage = "https://github.com/jrg-project-templates/esign"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6"
+  spec.required_ruby_version = ">= 2.0"
 
   spec.metadata = {
     "bug_tracker_uri" => "https://github.com/jrg-project-templates/esign/issues",
