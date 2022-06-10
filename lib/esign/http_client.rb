@@ -18,7 +18,7 @@ module Esign
       end
     end
 
-    def post(uri, params = {})
+    def post(url, params = {})
       request_wrapper(url: url, params: params, method: 'POST') do |options, headers|
         self.class.post(options[:url],{body: options[:params], headers: headers})
       end
@@ -30,9 +30,8 @@ module Esign
       options[:params] ||= {}
       headers = generate_header(options)
       response = yield(options, headers.transform_keys{ |key| key.to_s })
-
-    # rescue
-    #   retry unless (tries -= 1).zero?
+    rescue
+      retry unless (tries -= 1).zero?
     end
 
     def generate_header(options)

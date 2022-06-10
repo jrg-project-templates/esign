@@ -17,15 +17,22 @@ module Esign
         @config = load_config!
       end
 
+      def env
+        if defined?(::Rails)
+          Rails.env.to_s
+        else
+          ENV['RAILS_ENV'] || 'development'
+        end
+      end
+
       private_class_method def config_from_file
         if defined?(::Rails)
           config_file = Rails.root.join('config', 'esign.yml')
-          resolve_config_file(config_file, Rails.env.to_s)
+          resolve_config_file(config_file, env)
         else
           rails_config_file = File.join(Dir.getwd, 'config', 'esign.yml')
           if File.exist?(rails_config_file)
-            rails_env = ENV['RAILS_ENV'] || 'development'
-            resolve_config_file(rails_config_file, rails_env)
+            resolve_config_file(rails_config_file, env)
           end
         end
       end
