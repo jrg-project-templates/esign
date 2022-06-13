@@ -1,7 +1,7 @@
 module Esign
   class Api
     PRODUCTION_API_BASE = 'https://openapi.esign.cn'
-    SANDBOX_API_BASE = 'https://smlopenapi.esign.cn/'
+    SANDBOX_API_BASE = 'https://smlopenapi.esign.cn'
 
     DEFAULT_ENV_PLATFORM_MAPPING = {
       development: :sandbox,
@@ -11,13 +11,13 @@ module Esign
 
     def initialize(platform: nil, appid: nil, secrect: nil)
       platform ||= DEFAULT_ENV_PLATFORM_MAPPING[ConfigLoader.env.to_sym]
-      if [:sandbox, :production].include? platform
-        puts '------- warning: unsupported enviroment, fallback to sandbox -------'
+      platform = platform&.to_sym
+      unless [:sandbox, :production].include? platform
+        puts '------- WARNING: unsupported enviroment, fallback to sandbox -------'
         platform = :sandbox
       end
       @api_base = platform == :production ? PRODUCTION_API_BASE : SANDBOX_API_BASE
-      @client = HttpClient.new(base_uri: @api_base, appid: appid, secrect: secrect )
+      @client = HttpClient.new(base_url: @api_base, appid: appid, secrect: secrect )
     end
-
   end
 end
