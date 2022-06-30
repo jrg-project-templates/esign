@@ -2,6 +2,7 @@ module Esign
   class Api
     PRODUCTION_API_BASE = 'https://openapi.esign.cn'
     SANDBOX_API_BASE = 'https://smlopenapi.esign.cn'
+    # SANDBOX_API_BASE = 'http://localhost:3000'
 
     DEFAULT_ENV_PLATFORM_MAPPING = {
       development: :sandbox,

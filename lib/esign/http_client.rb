@@ -20,7 +20,15 @@ module Esign
 
     def post(url, params = nil)
       request_wrapper(url: url, params: params, method: 'POST') do |options, headers|
-        self.class.post(options[:url],{body: options[:params], headers: headers})
+        params = options[:params].is_a?(Hash) ? options[:params].to_json : options[:params]
+        self.class.post(options[:url],{body: params, headers: headers})
+      end
+    end
+
+    def put(url, params = nil)
+      request_wrapper(url: url, params: params, method: 'PUT') do |options, headers|
+        params = options[:params].is_a?(Hash) ? options[:params].to_json : options[:params]
+        self.class.put(options[:url],{body: params, headers: headers})
       end
     end
 
@@ -44,12 +52,12 @@ module Esign
       options = get_options(options) { {content_md5: content_md5} }
       {
         'X-Tsign-Open-App-Id': @appid,
+        'X-Tsign-Open-Auth-Mode': 'Signature',
+        'X-Tsign-Open-Ca-Timestamp': options[:timestamp],
         'Content-Type': options[:content_type], 
         'Accept': options[:accept],
-        'X-Tsign-Open-Ca-Timestamp': options[:timestamp],
         'X-Tsign-Open-Ca-Signature': generate_signature_string(options),
         'Content-MD5': content_md5,
-        'X-Tsign-Open-Auth-Mode': 'Signature'
       }
     end
 
@@ -58,7 +66,7 @@ module Esign
       default_options = {
         method: 'GET',
         accept: '*/*',
-        content_type: 'application/json;charset=UTF-8',
+        content_type: 'application/json; charset=UTF-8',
         time_string: now.rfc822.to_s,
         date: '',
         time: now,
@@ -78,7 +86,7 @@ module Esign
     def generate_signature_string(options)
       plain_string = generate_plain_string(options)
       sha256_string = OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), @secrect, plain_string)
-      Base64.encode64(sha256_string).gsub(/\n/, '')
+      Base64.strict_encode64(sha256_string)
     end
 
     def generate_plain_string(options)
@@ -89,8 +97,8 @@ module Esign
     def generate_content_md5(options)
       options = get_options(options)
       return '' if options[:params].nil? or options[:params].empty?
-      content = options[:params].to_s
-      Base64.encode64 Digest::MD5.hexdigest(content)
+      content = JSON.generate(options[:params])
+      Base64.strict_encode64 Digest::MD5.digest(content)
     end
   end
 end

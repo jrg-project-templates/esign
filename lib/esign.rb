@@ -1,5 +1,6 @@
 require 'esign/api'
 require 'esign/sign_flows_api'
+require 'esign/files_api'
 require 'esign/templates_api'
 require 'esign/http_client'
 require 'esign/config_loader'
@@ -21,7 +22,7 @@ module Esign
 
   def self.valid_api_categories
     # [:sign_flows, :files, :templates, :verify, :accounts, :default]
-    [:sign_flows, :templates, :default]
+    [:sign_flows, :files, :templates, :signers, :default]
   end
 
   def self.reload_config!
