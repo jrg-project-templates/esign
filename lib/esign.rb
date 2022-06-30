@@ -21,8 +21,7 @@ module Esign
   end
 
   def self.valid_api_categories
-    # [:sign_flows, :files, :templates, :verify, :accounts, :default]
-    [:sign_flows, :files, :templates, :signers, :default]
+    [:sign_flows, :files, :templates, :signers, :organizations, :default]
   end
 
   def self.reload_config!
