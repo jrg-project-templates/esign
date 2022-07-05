@@ -2,6 +2,8 @@ require 'esign/api'
 require 'esign/sign_flows_api'
 require 'esign/files_api'
 require 'esign/templates_api'
+require 'esign/signers_api'
+require 'esign/organizations_api'
 require 'esign/http_client'
 require 'esign/config_loader'
 

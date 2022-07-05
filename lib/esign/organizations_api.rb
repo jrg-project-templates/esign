@@ -1,7 +1,7 @@
 require 'esign/api'
 
 module Esign
-  class SignersApi < Api
+  class OrganizationsApi < Api
 
     # 创建机构签署账号
     # @see https://open.esign.cn/doc/opendoc/saas_api/kidg8y_gc0q92

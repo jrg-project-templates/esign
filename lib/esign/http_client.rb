@@ -32,6 +32,13 @@ module Esign
       end
     end
 
+    def delete(url, params = nil)
+      request_wrapper(url: url, params: params, method: 'DELETE') do |options, headers|
+        params = options[:params].is_a?(Hash) ? options[:params].to_json : options[:params]
+        self.class.delete(options[:url],{body: params, headers: headers})
+      end
+    end
+
     protected
 
     def request_wrapper(options, tries = 2)
