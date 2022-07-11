@@ -9,34 +9,46 @@ module Esign
 
       def load_config!
         config = config_from_file
-        config.symbolize_keys!
-        OpenStruct.new(config)
+        if config.nil?
+          puts '------- ERROR: cannot found valid config file -------'
+          return;
+        end
+        config = config.transform_keys{ |key| key.to_sym }
       end
 
       def reload_config!
         @config = load_config!
       end
 
-      private_class_method def config_from_file
+      def env
+        if defined?(::Rails)
+          Rails.env.to_s
+        else
+          ENV['RAILS_ENV'] || 'development'
+        end
+      end
+
+      private
+
+      def config_from_file
         if defined?(::Rails)
           config_file = Rails.root.join('config', 'esign.yml')
-          resolve_config_file(config_file, Rails.env.to_s)
+          resolve_config_file(config_file, env)
         else
           rails_config_file = File.join(Dir.getwd, 'config', 'esign.yml')
           if File.exist?(rails_config_file)
-            rails_env = ENV['RAILS_ENV'] || 'development'
-            resolve_config_file(rails_config_file, rails_env)
+            resolve_config_file(rails_config_file, env)
           end
         end
       end
 
-      private_class_method def self.resolve_config_file(config_file, env)
+      def resolve_config_file(config_file, env)
         return unless File.exist?(config_file)
         begin
           raw_data = YAML.load(ERB.new(File.read(config_file)).result)
         rescue NameError
         end
-        configs = {}
+        config = nil
         if env
           raw_data.each do |key, value|
             if key == env
