@@ -48,7 +48,7 @@ module Esign
     end
 
     # 获取签署地址
-    # @see https://open.esign.cn/doc/opendoc/saas_api/ezkln0_rgwmgp
+    # @see https://open.esign.cn/doc/opendoc/saas_api/fh3gh1_dwz08n
     def execute_url(flow_id: nil, account_id: nil)
       @client.get("/v1/signflows/#{flow_id}/executeUrl?accountId=#{account_id}")&.parsed_response
     end
