@@ -47,6 +47,12 @@ module Esign
       @client.put("/v1/signflows/#{params[:flow_id]}/signers/rushsign", params.reject {|p| p == :flow_id} || {})&.parsed_response
     end
 
+    # 获取签署地址
+    # @see https://open.esign.cn/doc/opendoc/saas_api/ezkln0_rgwmgp
+    def execute_url(flow_id: nil, account_id: nil)
+      @client.get("/v1/signflows/#{flow_id}/executeUrl?accountId=#{account_id}")&.parsed_response
+    end
+
     # 流程文档下载
     # @see https://open.esign.cn/doc/opendoc/saas_api/oyqsoq_zknh6g
     def get_documents(flow_id: nil)
